@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ऊँचाई पर सुरक्षा | मोबाइल स्कैफोल्डिंग</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --saffron: #FF6B00;
+  --saffron-light: #FF9A40;
+  --danger: #E63946;
+  --safe: #2EC4B6;
+  --safe-dark: #1a9e99;
+  --yellow: #FFD60A;
+  --dark: #0A0E1A;
+  --dark2: #141828;
+  --dark3: #1E2438;
+  --card: #1a1f35;
+  --text: #F0F4FF;
+  --text-muted: #8892b0;
+  --white: #ffffff;
+  --stripe: repeating-linear-gradient(
+    45deg,
+    #FF6B00,
+    #FF6B00 12px,
+    #FFD60A 12px,
+    #FFD60A 24px
+  );
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: pointer;
+}
+
+/* ── AUDIO INDICATOR ── */
+#audio-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  background: var(--saffron);
+  border-radius: 50px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 24px rgba(255,107,0,0.5);
+  transition: all 0.3s;
+  pointer-events: none;
+}
+#audio-indicator.speaking {
+  background: var(--safe);
+  box-shadow: 0 4px 24px rgba(46,196,182,0.5);
+}
+.audio-waves {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  height: 16px;
+}
+.audio-waves span {
+  width: 3px;
+  background: white;
+  border-radius: 2px;
+  animation: wave 0.8s ease-in-out infinite;
+}
+.audio-waves span:nth-child(1) { height: 5px; animation-delay: 0s; }
+.audio-waves span:nth-child(2) { height: 12px; animation-delay: 0.1s; }
+.audio-waves span:nth-child(3) { height: 8px; animation-delay: 0.2s; }
+.audio-waves span:nth-child(4) { height: 14px; animation-delay: 0.3s; }
+.audio-waves span:nth-child(5) { height: 6px; animation-delay: 0.4s; }
+@keyframes wave {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.8); }
+}
+
+/* ── WARNING STRIPE ── */
+.warning-stripe {
+  height: 10px;
+  background: var(--stripe);
+  width: 100%;
+}
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(160deg, #0A0E1A 0%, #141828 60%, #1E1535 100%);
+  padding: 50px 20px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px; left: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,0,0.12) 0%, transparent 70%);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; right: -80px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(46,196,182,0.10) 0%, transparent 70%);
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,107,0,0.15);
+  border: 1.5px solid rgba(255,107,0,0.4);
+  color: var(--saffron-light);
+  padding: 6px 18px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  animation: pulse-border 2s ease-in-out infinite;
+}
+@keyframes pulse-border {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,107,0,0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(255,107,0,0); }
+}
+.hero h1 {
+  font-size: clamp(28px, 6vw, 52px);
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--white);
+  margin-bottom: 8px;
+  position: relative;
+}
+.hero h1 .accent { color: var(--saffron); }
+.hero-sub {
+  font-size: clamp(14px, 3vw, 20px);
+  color: var(--safe);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.hero-desc {
+  font-size: 15px;
+  color: var(--text-muted);
+  max-width: 520px;
+  margin: 0 auto 30px;
+}
+.hero-touch-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,214,10,0.12);
+  border: 1px solid rgba(255,214,10,0.3);
+  color: var(--yellow);
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  animation: float 2s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ── SCAFFOLDING SVG HERO ── */
+.hero-svg-wrap {
+  max-width: 360px;
+  margin: 30px auto 0;
+  position: relative;
+}
+
+/* ── SECTION LAYOUT ── */
+.section {
+  padding: 50px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.section-title {
+  font-size: clamp(22px, 4vw, 32px);
+  font-weight: 800;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.section-title .hi { color: var(--saffron); }
+.section-title .safe { color: var(--safe); }
+.section-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+.divider {
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--saffron), var(--yellow));
+  border-radius: 2px;
+  margin: 12px auto 32px;
+}
+
+/* ── CARDS ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 16px 16px 0 0;
+}
+.card.danger::before { background: linear-gradient(90deg, var(--danger), #ff8a80); }
+.card.safe::before { background: linear-gradient(90deg, var(--safe), #80ffd4); }
+.card.warning::before { background: linear-gradient(90deg, var(--yellow), var(--saffron)); }
+.card:hover, .card:active { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+
+.card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 14px;
+}
+.card.danger .card-icon { background: rgba(230,57,70,0.15); }
+.card.safe .card-icon { background: rgba(46,196,182,0.15); }
+.card.warning .card-icon { background: rgba(255,214,10,0.15); }
+
+.card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+.card p { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+
+/* ── STEPS ── */
+.steps-list { display: flex; flex-direction: column; gap: 14px; }
+.step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: var(--card);
+  border-radius: 14px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.step:hover, .step:active { transform: translateX(6px); }
+.step-num {
+  min-width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--saffron), var(--yellow));
+  color: var(--dark);
+  font-weight: 900;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(255,107,0,0.4);
+}
+.step-content h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.step-content p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+/* ── DO / DONT ── */
+.do-dont-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media(max-width: 480px) { .do-dont-grid { grid-template-columns: 1fr; } }
+
+.do-block, .dont-block {
+  border-radius: 14px;
+  padding: 20px;
+  cursor: pointer;
+}
+.do-block {
+  background: rgba(46,196,182,0.08);
+  border: 1.5px solid rgba(46,196,182,0.25);
+}
+.dont-block {
+  background: rgba(230,57,70,0.08);
+  border: 1.5px solid rgba(230,57,70,0.25);
+}
+.do-header {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 800; font-size: 17px;
+  color: var(--safe); margin-bottom: 12px;
+}
+.dont-header {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 800; font-size: 17px;
+  color: var(--danger); margin-bottom: 12px;
+}
+.do-block li, .dont-block li {
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 8px;
+  padding-left: 20px;
+  position: relative;
+  line-height: 1.55;
+  list-style: none;
+}
+.do-block li::before { content: '✔'; position: absolute; left: 0; color: var(--safe); }
+.dont-block li::before { content: '✘'; position: absolute; left: 0; color: var(--danger); }
+
+/* ── PPE SECTION ── */
+.ppe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+}
+.ppe-item {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 18px 12px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.ppe-item:hover, .ppe-item:active {
+  transform: translateY(-4px);
+  border-color: rgba(255,214,10,0.4);
+}
+.ppe-icon { font-size: 36px; margin-bottom: 10px; display: block; }
+.ppe-name { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.4; }
+
+/* ── DANGER ALERT ── */
+.danger-alert {
+  background: rgba(230,57,70,0.12);
+  border: 2px solid rgba(230,57,70,0.4);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+.danger-alert-icon { font-size: 36px; flex-shrink: 0; }
+.danger-alert h3 { font-size: 18px; font-weight: 800; color: var(--danger); margin-bottom: 6px; }
+.danger-alert p { font-size: 14px; color: #ffb3b8; line-height: 1.65; }
+
+/* ── QUIZ ── */
+.quiz-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,0.07);
+  margin-bottom: 14px;
+}
+.quiz-q { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-option {
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.10);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text);
+  text-align: left;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+.quiz-option:hover { background: rgba(255,107,0,0.10); border-color: rgba(255,107,0,0.4); }
+.quiz-option.correct { background: rgba(46,196,182,0.15); border-color: var(--safe); color: var(--safe); }
+.quiz-option.wrong { background: rgba(230,57,70,0.15); border-color: var(--danger); color: var(--danger); }
+.quiz-feedback { margin-top: 12px; font-size: 14px; font-weight: 600; display: none; }
+
+/* ── EMERGENCY BOX ── */
+.emergency-box {
+  background: linear-gradient(135deg, rgba(230,57,70,0.15), rgba(255,107,0,0.10));
+  border: 2px solid rgba(230,57,70,0.5);
+  border-radius: 20px;
+  padding: 30px 24px;
+  text-align: center;
+  cursor: pointer;
+}
+.emergency-box h2 { font-size: 24px; font-weight: 900; color: var(--danger); margin-bottom: 12px; }
+.emergency-box p { font-size: 15px; color: var(--text-muted); margin-bottom: 20px; }
+.emergency-steps { display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.e-step {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.e-step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--danger);
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--dark2);
+  text-align: center;
+  padding: 30px 20px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+footer strong { color: var(--saffron); }
+
+/* ── SECTION SEPARATORS ── */
+.section-sep {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+  margin: 0 auto;
+}
+
+/* ── FADE IN ANIMATIONS ── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ── SPEAKING HIGHLIGHT ── */
+.speaking-el {
+  outline: 2px solid var(--safe);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: var(--saffron); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- AUDIO INDICATOR -->
+<div id="audio-indicator">
+  <div class="audio-waves">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <span id="audio-label">छूएं — सुनें</span>
+</div>
+
+<!-- WARNING STRIPE TOP -->
+<div class="warning-stripe"></div>
+
+<!-- ══ HERO ══ -->
+<div class="hero" data-speak="नमस्ते! यह वेबसाइट जेएन लाइटिंग इंडिया एलएलपी द्वारा बनाई गई है। यह वेबसाइट sमोबाइल स्कैफोल्डिंग और ऊँचाई पर काम करते समय सुरक्षा के बारे में जानकारी देती है। कृपया प्रत्येक भाग को ध्यान से पढ़ें और सुरक्षित रहें।">
+  <div class="hero-badge">⚠️ सुरक्षा जागरूकता जेएन लाइटिंग इंडिया एलएलपी द्वारा</div>
+  <h1>ऊँचाई पर <span class="accent">सुरक्षा</span></h1>
+  <div class="hero-sub">मोबाइल स्कैफोल्डिंग — सही तरीका, सुरक्षित जीवन</div>
+  <p class="hero-desc">निर्माण स्थल पर ऊँचाई से गिरना सबसे बड़ा खतरा है। इस पाठ्यक्रम से सीखें कैसे सुरक्षित रहें।</p>
+  <div class="hero-touch-hint">
+    👆 कहीं भी छूएं — हिंदी में सुनें
+  </div>
+
+  <!-- SCAFFOLDING ILLUSTRATION -->
+  <div class="hero-svg-wrap">
+    <svg viewBox="0 0 360 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <!-- Sky gradient -->
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0A0E1A"/>
+          <stop offset="100%" stop-color="#1E2438"/>
+        </linearGradient>
+        <linearGradient id="scaffoldGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#888"/>
+          <stop offset="100%" stop-color="#555"/>
+        </linearGradient>
+        <linearGradient id="workerGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#FF9A40"/>
+          <stop offset="100%" stop-color="#FF6B00"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Background -->
+      <rect width="360" height="280" fill="url(#skyGrad)" rx="12"/>
+
+      <!-- Building wall -->
+      <rect x="180" y="20" width="160" height="240" fill="#2a2f4a" rx="4"/>
+      <!-- Windows -->
+      <rect x="196" y="38" width="30" height="24" fill="#FFD60A" rx="3" opacity="0.6"/>
+      <rect x="238" y="38" width="30" height="24" fill="#FFD60A" rx="3" opacity="0.4"/>
+      <rect x="196" y="78" width="30" height="24" fill="#4fc3f7" rx="3" opacity="0.5"/>
+      <rect x="238" y="78" width="30" height="24" fill="#4fc3f7" rx="3" opacity="0.3"/>
+      <rect x="196" y="118" width="30" height="24" fill="#FFD60A" rx="3" opacity="0.5"/>
+      <rect x="238" y="118" width="30" height="24" fill="#4fc3f7" rx="3" opacity="0.4"/>
+
+      <!-- SCAFFOLD FRAME - vertical poles -->
+      <rect x="130" y="30" width="8" height="230" fill="url(#scaffoldGrad)" rx="4"/>
+      <rect x="172" y="30" width="8" height="230" fill="url(#scaffoldGrad)" rx="4"/>
+
+      <!-- Scaffold horizontal platforms -->
+      <!-- Platform 1 - top (worker level) -->
+      <rect x="120" y="72" width="68" height="8" fill="#c8a96e" rx="3"/>
+      <!-- Platform 2 -->
+      <rect x="120" y="130" width="68" height="8" fill="#c8a96e" rx="3"/>
+      <!-- Platform 3 -->
+      <rect x="120" y="188" width="68" height="8" fill="#c8a96e" rx="3"/>
+
+      <!-- Diagonal braces -->
+      <line x1="130" y1="30" x2="180" y2="80" stroke="#777" stroke-width="3"/>
+      <line x1="138" y1="80" x2="180" y2="130" stroke="#777" stroke-width="3"/>
+      <line x1="138" y1="130" x2="180" y2="188" stroke="#777" stroke-width="3"/>
+      <line x1="180" y1="30" x2="130" y2="80" stroke="#777" stroke-width="2"/>
+      <line x1="180" y1="80" x2="130" y2="130" stroke="#777" stroke-width="2"/>
+
+      <!-- Guardrail top platform -->
+      <rect x="120" y="54" width="68" height="4" fill="#FF6B00" rx="2" opacity="0.9"/>
+      <line x1="128" y1="54" x2="128" y2="72" stroke="#FF6B00" stroke-width="3"/>
+      <line x1="180" y1="54" x2="180" y2="72" stroke="#FF6B00" stroke-width="3"/>
+
+      <!-- Toe board -->
+      <rect x="120" y="66" width="68" height="6" fill="#8B5E3C" rx="2"/>
+
+      <!-- WHEEL BASE (mobile) -->
+      <rect x="118" y="252" width="66" height="12" fill="#555" rx="4"/>
+      <!-- Wheels -->
+      <circle cx="132" cy="266" r="8" fill="#333" stroke="#FF6B00" stroke-width="2"/>
+      <circle cx="168" cy="266" r="8" fill="#333" stroke="#FF6B00" stroke-width="2"/>
+      <circle cx="132" cy="266" r="3" fill="#666"/>
+      <circle cx="168" cy="266" r="3" fill="#666"/>
+
+      <!-- Adjustable base legs -->
+      <rect x="122" y="240" width="6" height="14" fill="#666" rx="2"/>
+      <rect x="163" y="240" width="6" height="14" fill="#666" rx="2"/>
+
+      <!-- WORKER on top platform -->
+      <!-- Body/Vest (orange safety) -->
+      <rect x="144" y="34" width="18" height="24" fill="url(#workerGrad)" rx="4"/>
+      <!-- Reflective strips on vest -->
+      <rect x="144" y="42" width="18" height="3" fill="#FFD60A" opacity="0.9"/>
+      <rect x="144" y="48" width="18" height="3" fill="#FFD60A" opacity="0.9"/>
+      <!-- Head + Helmet -->
+      <circle cx="153" cy="26" r="10" fill="#FDBCB4"/>
+      <ellipse cx="153" cy="19" rx="11" ry="7" fill="#FFD60A"/>
+      <rect x="142" y="21" width="22" height="5" fill="#FFC107" rx="2"/>
+      <!-- Arms -->
+      <rect x="136" y="38" width="8" height="14" fill="#FDBCB4" rx="3"/>
+      <rect x="162" y="38" width="8" height="14" fill="#FDBCB4" rx="3"/>
+      <!-- Legs -->
+      <rect x="146" y="58" width="7" height="14" fill="#37474f" rx="3"/>
+      <rect x="153" y="58" width="7" height="14" fill="#37474f" rx="3"/>
+      <!-- Harness lines -->
+      <line x1="153" y1="30" x2="153" y2="55" stroke="#E63946" stroke-width="2" stroke-dasharray="4,2"/>
+      <circle cx="153" cy="55" r="3" fill="#E63946"/>
+
+      <!-- Safety harness anchor at top -->
+      <rect x="150" y="30" width="6" height="4" fill="#E63946" rx="1"/>
+
+      <!-- Tool box on platform -->
+      <rect x="125" y="60" width="16" height="10" fill="#E63946" rx="2"/>
+      <rect x="130" y="58" width="6" height="3" fill="#c00" rx="1"/>
+
+      <!-- Tags/Labels -->
+      <!-- Helmet label -->
+      <line x1="165" y1="18" x2="195" y2="10" stroke="rgba(255,214,10,0.7)" stroke-width="1.5"/>
+      <rect x="196" y="4" width="60" height="16" rx="4" fill="rgba(255,214,10,0.15)" stroke="rgba(255,214,10,0.5)" stroke-width="1"/>
+      <text x="199" y="16" font-family="Noto Sans Devanagari" font-size="7.5" fill="#FFD60A">⛑ हेलमेट</text>
+
+      <!-- Harness label -->
+      <line x1="153" y1="42" x2="100" y2="50" stroke="rgba(230,57,70,0.7)" stroke-width="1.5"/>
+      <rect x="30" y="42" width="68" height="18" rx="4" fill="rgba(230,57,70,0.12)" stroke="rgba(230,57,70,0.5)" stroke-width="1"/>
+      <text x="34" y="54" font-family="Noto Sans Devanagari" font-size="7.5" fill="#ff8a80">🔴 सेफ्टी हार्नेस</text>
+
+      <!-- Guardrail label -->
+      <line x1="154" y1="56" x2="95" y2="95" stroke="rgba(255,107,0,0.7)" stroke-width="1.5"/>
+      <rect x="20" y="86" width="74" height="18" rx="4" fill="rgba(255,107,0,0.12)" stroke="rgba(255,107,0,0.5)" stroke-width="1"/>
+      <text x="24" y="98" font-family="Noto Sans Devanagari" font-size="7.5" fill="#FF9A40">🔶 गार्डरेल</text>
+
+      <!-- Wheel lock label -->
+      <line x1="150" y1="264" x2="95" y2="250" stroke="rgba(46,196,182,0.7)" stroke-width="1.5"/>
+      <rect x="12" y="238" width="82" height="18" rx="4" fill="rgba(46,196,182,0.12)" stroke="rgba(46,196,182,0.5)" stroke-width="1"/>
+      <text x="16" y="250" font-family="Noto Sans Devanagari" font-size="7.5" fill="#2EC4B6">🔒 पहिया लॉक</text>
+
+      <!-- Animated glow on worker -->
+      <circle cx="153" cy="42" r="28" fill="none" stroke="#FF6B00" stroke-width="1.5" opacity="0.4">
+        <animate attributeName="r" values="28;36;28" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.4;0;0.4" dur="3s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- Ground -->
+      <rect x="0" y="265" width="360" height="15" fill="#1a2040" rx="0"/>
+      <rect x="0" y="272" width="360" height="8" fill="rgba(200,169,110,0.15)"/>
+    </svg>
+  </div>
+</div>
+
+<div class="warning-stripe"></div>
+
+<!-- ══ SECTION 1: WHAT IS MOBILE SCAFFOLDING ══ -->
+<div class="section fade-in" id="s1">
+  <div class="section-title" data-speak="मोबाइल स्कैफोल्डिंग क्या है? मोबाइल स्कैफोल्डिंग एक पहियों वाला अस्थायी मचान है जिसे निर्माण स्थल पर ऊँचाई पर काम करने के लिए उपयोग किया जाता है। यह हल्का, आसानी से चलने योग्य और तेजी से लगाने योग्य होता है।">📐 मोबाइल स्कैफोल्डिंग <span class="hi">क्या है?</span></div>
+  <div class="divider"></div>
+
+  <!-- Detailed SVG Diagram -->
+  <div style="background:var(--card);border-radius:16px;padding:20px;margin-bottom:20px;cursor:pointer;" data-speak="मोबाइल स्कैफोल्डिंग के मुख्य भाग हैं — ऊपरी प्लेटफॉर्म जहाँ मजदूर खड़े होते हैं, गार्डरेल जो गिरने से बचाती है, सीढ़ी जो ऊपर चढ़ने के लिए होती है, खड़े पोल जो ढाँचे को सहारा देते हैं, और पहिये जिन पर लॉक लगाना जरूरी है।">
+    <svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <defs>
+        <linearGradient id="platGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#c8a96e"/>
+          <stop offset="100%" stop-color="#8B5E3C"/>
+        </linearGradient>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 Z" fill="#FFD60A"/>
+        </marker>
+      </defs>
+
+      <rect width="700" height="360" fill="#1a1f35" rx="12"/>
+
+      <!-- Title -->
+      <text x="350" y="28" font-family="Noto Sans Devanagari" font-size="16" fill="#c8a96e" text-anchor="middle" font-weight="bold">मोबाइल स्कैफोल्डिंग — भाग और कार्य</text>
+
+      <!-- Main scaffold frame -->
+      <!-- Left vertical pole -->
+      <rect x="200" y="60" width="12" height="260" fill="#888" rx="6"/>
+      <!-- Right vertical pole -->
+      <rect x="370" y="60" width="12" height="260" fill="#888" rx="6"/>
+
+      <!-- Cross braces -->
+      <line x1="200" y1="60" x2="382" y2="200" stroke="#666" stroke-width="5"/>
+      <line x1="382" y1="60" x2="200" y2="200" stroke="#666" stroke-width="5"/>
+      <line x1="200" y1="200" x2="382" y2="320" stroke="#666" stroke-width="5"/>
+
+      <!-- Horizontal rungs/platform boards -->
+      <!-- Top platform -->
+      <rect x="188" y="80" width="206" height="14" fill="url(#platGrad)" rx="4"/>
+      <!-- Toe board front -->
+      <rect x="188" y="90" width="206" height="8" fill="#6B3F1A" rx="2"/>
+      <!-- Mid platform -->
+      <rect x="188" y="200" width="206" height="14" fill="url(#platGrad)" rx="4"/>
+      <!-- Bottom rail -->
+      <rect x="188" y="318" width="206" height="12" fill="#555" rx="4"/>
+
+      <!-- Guardrail system -->
+      <!-- Top rail -->
+      <rect x="188" y="52" width="206" height="8" fill="#FF6B00" rx="4"/>
+      <!-- Mid rail -->
+      <rect x="188" y="68" width="206" height="6" fill="#FF9A40" rx="3"/>
+      <!-- Vertical posts -->
+      <rect x="192" y="52" width="6" height="42" fill="#FF6B00" rx="3"/>
+      <rect x="284" y="52" width="6" height="42" fill="#FF6B00" rx="3"/>
+      <rect x="376" y="52" width="6" height="42" fill="#FF6B00" rx="3"/>
+
+      <!-- Ladder (internal) -->
+      <!-- Ladder rails -->
+      <rect x="340" y="92" width="6" height="230" fill="#999" rx="3"/>
+      <rect x="360" y="92" width="6" height="230" fill="#999" rx="3"/>
+      <!-- Ladder rungs -->
+      <rect x="340" y="110" width="26" height="5" fill="#aaa" rx="2"/>
+      <rect x="340" y="130" width="26" height="5" fill="#aaa" rx="2"/>
+      <rect x="340" y="150" width="26" height="5" fill="#aaa" rx="2"/>
+      <rect x="340" y="170" width="26" height="5" fill="#aaa" rx="2"/>
+      <rect x="340" y="190" width="26" height="5" fill="#aaa" rx="2"/>
+      <rect x="340" y="210" width="26" height="5" fill="#aaa" rx="2"/>
+      <rect x="340" y="230" width="26" height="5" fill="#aaa" rx="2"/>
+      <rect x="340" y="250" width="26" height="5" fill="#aaa" rx="2"/>
+      <rect x="340" y="270" width="26" height="5" fill="#aaa" rx="2"/>
+      <rect x="340" y="290" width="26" height="5" fill="#aaa" rx="2"/>
+
+      <!-- Outriggers / Base extension -->
+      <rect x="130" y="318" width="70" height="10" fill="#666" rx="3"/>
+      <rect x="382" y="318" width="70" height="10" fill="#666" rx="3"/>
+      <!-- Adjustable screw feet -->
+      <rect x="138" y="328" width="10" height="18" fill="#555" rx="3"/>
+      <rect x="432" y="328" width="10" height="18" fill="#555" rx="3"/>
+      <rect x="200" y="330" width="10" height="16" fill="#555" rx="3"/>
+      <rect x="372" y="330" width="10" height="16" fill="#555" rx="3"/>
+
+      <!-- Wheels with locks -->
+      <circle cx="148" cy="350" r="12" fill="#333" stroke="#2EC4B6" stroke-width="3"/>
+      <circle cx="148" cy="350" r="5" fill="#555"/>
+      <rect x="144" y="356" width="8" height="4" fill="#2EC4B6" rx="1"/>
+
+      <circle cx="444" cy="350" r="12" fill="#333" stroke="#2EC4B6" stroke-width="3"/>
+      <circle cx="444" cy="350" r="5" fill="#555"/>
+      <rect x="440" y="356" width="8" height="4" fill="#2EC4B6" rx="1"/>
+
+      <circle cx="208" cy="350" r="12" fill="#333" stroke="#2EC4B6" stroke-width="3"/>
+      <circle cx="208" cy="350" r="5" fill="#555"/>
+      <rect x="204" y="356" width="8" height="4" fill="#2EC4B6" rx="1"/>
+
+      <circle cx="380" cy="350" r="12" fill="#333" stroke="#2EC4B6" stroke-width="3"/>
+      <circle cx="380" cy="350" r="5" fill="#555"/>
+      <rect x="376" y="356" width="8" height="4" fill="#2EC4B6" rx="1"/>
+
+      <!-- ─── LABELS with arrows ─── -->
+      <!-- Top guardrail label -->
+      <line x1="188" y1="56" x2="120" y2="40" stroke="#FF6B00" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <rect x="10" y="28" width="110" height="28" rx="6" fill="rgba(255,107,0,0.15)" stroke="rgba(255,107,0,0.5)" stroke-width="1"/>
+      <text x="20" y="40" font-family="Noto Sans Devanagari" font-size="9" fill="#FF9A40" font-weight="bold">🔶 ऊपरी रेलिंग</text>
+      <text x="20" y="52" font-family="Noto Sans Devanagari" font-size="8" fill="#aaa">(Top Guardrail)</text>
+
+      <!-- Platform label -->
+      <line x1="290" y1="87" x2="500" y2="75" stroke="#c8a96e" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <rect x="500" y="60" width="130" height="28" rx="6" fill="rgba(200,169,110,0.15)" stroke="rgba(200,169,110,0.5)" stroke-width="1"/>
+      <text x="510" y="72" font-family="Noto Sans Devanagari" font-size="9" fill="#c8a96e" font-weight="bold">🪜 कार्य प्लेटफॉर्म</text>
+      <text x="510" y="84" font-family="Noto Sans Devanagari" font-size="8" fill="#aaa">(Work Platform)</text>
+
+      <!-- Ladder label -->
+      <line x1="366" y1="180" x2="500" y2="170" stroke="#4fc3f7" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <rect x="500" y="155" width="120" height="28" rx="6" fill="rgba(79,195,247,0.10)" stroke="rgba(79,195,247,0.4)" stroke-width="1"/>
+      <text x="510" y="167" font-family="Noto Sans Devanagari" font-size="9" fill="#4fc3f7" font-weight="bold">🔼 अंदरूनी सीढ़ी</text>
+      <text x="510" y="179" font-family="Noto Sans Devanagari" font-size="8" fill="#aaa">(Internal Ladder)</text>
+
+      <!-- Cross brace label -->
+      <line x1="285" y1="145" x2="500" y2="240" stroke="#888" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <rect x="500" y="225" width="110" height="28" rx="6" fill="rgba(136,136,136,0.10)" stroke="rgba(136,136,136,0.4)" stroke-width="1"/>
+      <text x="510" y="237" font-family="Noto Sans Devanagari" font-size="9" fill="#aaa" font-weight="bold">✖ क्रॉस ब्रेस</text>
+      <text x="510" y="249" font-family="Noto Sans Devanagari" font-size="8" fill="#777">(Cross Brace)</text>
+
+      <!-- Wheel label -->
+      <line x1="208" y1="360" x2="260" y2="340" stroke="#2EC4B6" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <rect x="10" y="310" width="140" height="30" rx="6" fill="rgba(46,196,182,0.10)" stroke="rgba(46,196,182,0.4)" stroke-width="1"/>
+      <text x="20" y="323" font-family="Noto Sans Devanagari" font-size="9" fill="#2EC4B6" font-weight="bold">🔒 पहिया + ब्रेक लॉक</text>
+      <text x="20" y="336" font-family="Noto Sans Devanagari" font-size="8" fill="#aaa">(Castors with Brake)</text>
+
+      <!-- Outrigger label -->
+      <line x1="165" y1="322" x2="170" y2="295" stroke="#FFD60A" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <rect x="10" y="268" width="100" height="28" rx="6" fill="rgba(255,214,10,0.10)" stroke="rgba(255,214,10,0.4)" stroke-width="1"/>
+      <text x="18" y="280" font-family="Noto Sans Devanagari" font-size="9" fill="#FFD60A" font-weight="bold">📐 आउटरिगर</text>
+      <text x="18" y="292" font-family="Noto Sans Devanagari" font-size="8" fill="#aaa">(Stabilizer)</text>
+
+      <!-- Height indicator -->
+      <line x1="480" y1="94" x2="480" y2="322" stroke="rgba(230,57,70,0.6)" stroke-width="2" stroke-dasharray="6,4"/>
+      <line x1="470" y1="94" x2="490" y2="94" stroke="#E63946" stroke-width="2"/>
+      <line x1="470" y1="322" x2="490" y2="322" stroke="#E63946" stroke-width="2"/>
+      <rect x="450" y="190" width="60" height="28" rx="6" fill="rgba(230,57,70,0.12)" stroke="rgba(230,57,70,0.4)" stroke-width="1"/>
+      <text x="480" y="202" font-family="Noto Sans Devanagari" font-size="8" fill="#E63946" text-anchor="middle" font-weight="bold">ऊँचाई</text>
+      <text x="480" y="214" font-family="sans-serif" font-size="9" fill="#E63946" text-anchor="middle">≤12 मी.</text>
+    </svg>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card warning" data-speak="मोबाइल स्कैफोल्डिंग का उपयोग केवल 12 मीटर तक की ऊँचाई के लिए किया जाता है। इससे अधिक ऊँचाई के लिए अलग प्रकार के मचान का उपयोग करें।">
+      <div class="card-icon">📏</div>
+      <h3>अधिकतम ऊँचाई</h3>
+      <p>मोबाइल स्कैफोल्ड की अधिकतम ऊँचाई <strong>12 मीटर</strong> तक होती है। इससे अधिक उपयोग करना खतरनाक है।</p>
+    </div>
+    <div class="card safe" data-speak="मोबाइल स्कैफोल्डिंग की लोड क्षमता प्रति प्लेटफॉर्म 275 किलोग्राम तक होती है। कभी भी इससे अधिक वजन न रखें।">
+      <div class="card-icon">⚖️</div>
+      <h3>अधिकतम भार क्षमता</h3>
+      <p>प्रति प्लेटफॉर्म अधिकतम <strong>275 किग्रा</strong> भार ही रखा जा सकता है। अधिक भार जानलेवा हो सकता है।</p>
+    </div>
+    <div class="card danger" data-speak="स्थिरता अनुपात बहुत जरूरी है। मचान की ऊँचाई उसकी चौड़ाई से तीन गुना से अधिक नहीं होनी चाहिए। अन्यथा मचान पलट सकता है।">
+      <div class="card-icon">⚖️</div>
+      <h3>स्थिरता अनुपात</h3>
+      <p>ऊँचाई : चौड़ाई का अनुपात <strong>3:1</strong> से अधिक नहीं होना चाहिए। अन्यथा मचान पलट सकता है।</p>
+    </div>
+  </div>
+</div>
+
+<div class="section-sep"></div>
+
+<!-- ══ SECTION 2: HAZARDS ══ -->
+<div class="section fade-in" id="s2">
+  <div class="section-title">⚠️ मुख्य <span class="hi">खतरे</span></div>
+  <p class="section-subtitle" data-speak="मोबाइल स्कैफोल्डिंग से जुड़े मुख्य खतरों के बारे में जानें">ऊँचाई पर काम करते समय ये खतरे सबसे ज्यादा होते हैं</p>
+  <div class="divider"></div>
+
+  <div class="danger-alert" data-speak="चेतावनी! भारत में निर्माण स्थलों पर होने वाली मौतों में से 40 प्रतिशत ऊँचाई से गिरने के कारण होती हैं। मोबाइल स्कैफोल्डिंग पर असावधानी जानलेवा हो सकती है। हर साल हजारों मजदूर इस कारण घायल होते हैं।">
+    <div class="danger-alert-icon">☠️</div>
+    <div>
+      <h3>भारत में खतरनाक आँकड़े!</h3>
+      <p>निर्माण स्थलों पर होने वाली मौतों में <strong>40%</strong> ऊँचाई से गिरने के कारण होती हैं। प्रतिवर्ष हजारों मजदूर घायल होते हैं — सिर्फ इसलिए क्योंकि सुरक्षा नियमों का पालन नहीं किया जाता।</p>
+    </div>
+  </div>
+
+  <!-- Hazard SVG -->
+  <div style="background:var(--card);border-radius:16px;padding:16px;margin-bottom:20px;cursor:pointer;" data-speak="मुख्य खतरे इस प्रकार हैं। पहला — पहिया लॉक न करना। दूसरा — गार्डरेल न लगाना। तीसरा — अधिक भार रखना। चौथा — खराब सतह पर उपयोग। पाँचवाँ — बिना हार्नेस के काम करना।">
+    <svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <rect width="680" height="220" fill="#141828" rx="12"/>
+      <text x="340" y="24" font-family="Noto Sans Devanagari" font-size="14" fill="#E63946" text-anchor="middle" font-weight="bold">⚠ मुख्य खतरे — Hazard Identification</text>
+
+      <!-- Hazard 1: No wheel lock -->
+      <g>
+        <rect x="20" y="40" width="116" height="160" rx="10" fill="rgba(230,57,70,0.10)" stroke="rgba(230,57,70,0.4)" stroke-width="1.5"/>
+        <!-- Scaffold tilting -->
+        <g transform="translate(78,120) rotate(-15)">
+          <rect x="-20" y="-60" width="8" height="120" fill="#888" rx="4"/>
+          <rect x="12" y="-60" width="8" height="120" fill="#888" rx="4"/>
+          <rect x="-24" y="-10" width="56" height="6" fill="#c8a96e" rx="3"/>
+          <circle cx="-16" cy="65" r="10" fill="#333" stroke="#E63946" stroke-width="2.5"/>
+          <circle cx="16" cy="65" r="10" fill="#333" stroke="#E63946" stroke-width="2.5"/>
+          <line x1="-16" y1="75" x2="-16" y2="85" stroke="#E63946" stroke-width="2.5"/>
+          <line x1="16" y1="75" x2="16" y2="85" stroke="#E63946" stroke-width="2.5"/>
+        </g>
+        <!-- X mark on wheel -->
+        <text x="78" y="190" font-family="sans-serif" font-size="14" fill="#E63946" text-anchor="middle">✘ लॉक नहीं</text>
+        <text x="78" y="50" font-family="Noto Sans Devanagari" font-size="8.5" fill="#ff8a80" text-anchor="middle" font-weight="bold">पहिया</text>
+        <text x="78" y="61" font-family="Noto Sans Devanagari" font-size="8.5" fill="#ff8a80" text-anchor="middle" font-weight="bold">अनलॉक!</text>
+      </g>
+
+      <!-- Hazard 2: No guardrail -->
+      <g>
+        <rect x="148" y="40" width="116" height="160" rx="10" fill="rgba(230,57,70,0.10)" stroke="rgba(230,57,70,0.4)" stroke-width="1.5"/>
+        <!-- Scaffold no rail -->
+        <rect x="182" y="80" width="50" height="8" fill="#888" rx="4"/><!-- left pole top -->
+        <rect x="182" y="120" width="8" height="60" fill="#888" rx="4"/>
+        <rect x="224" y="120" width="8" height="60" fill="#888" rx="4"/>
+        <rect x="180" y="120" width="56" height="8" fill="#c8a96e" rx="3"/>
+        <!-- Person falling off -->
+        <circle cx="220" cy="90" r="9" fill="#FDBCB4"/>
+        <rect x="215" y="99" width="10" height="14" fill="#FF6B00" rx="3"/>
+        <!-- Fall arrow -->
+        <line x1="230" y1="90" x2="248" y2="115" stroke="#E63946" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <text x="206" y="195" font-family="Noto Sans Devanagari" font-size="8" fill="#ff8a80" text-anchor="middle" font-weight="bold">रेलिंग नहीं!</text>
+        <text x="206" y="50" font-family="Noto Sans Devanagari" font-size="8.5" fill="#ff8a80" text-anchor="middle" font-weight="bold">गार्डरेल</text>
+        <text x="206" y="61" font-family="Noto Sans Devanagari" font-size="8.5" fill="#ff8a80" text-anchor="middle" font-weight="bold">नहीं लगाई</text>
+      </g>
+
+      <!-- Hazard 3: Overload -->
+      <g>
+        <rect x="276" y="40" width="116" height="160" rx="10" fill="rgba(230,57,70,0.10)" stroke="rgba(230,57,70,0.4)" stroke-width="1.5"/>
+        <rect x="296" y="100" width="8" height="80" fill="#888" rx="4"/>
+        <rect x="370" y="100" width="8" height="80" fill="#888" rx="4"/>
+        <!-- Bending platform -->
+        <path d="M 292 108 Q 334 122 382 108" fill="none" stroke="#c8a96e" stroke-width="5"/>
+        <!-- Heavy boxes -->
+        <rect x="308" y="78" width="22" height="18" fill="#E63946" rx="2"/>
+        <rect x="332" y="78" width="22" height="18" fill="#E63946" rx="2"/>
+        <rect x="318" y="62" width="20" height="16" fill="#cc2233" rx="2"/>
+        <!-- Crack symbol -->
+        <text x="334" y="165" font-family="sans-serif" font-size="18" fill="#E63946" text-anchor="middle">💥</text>
+        <text x="334" y="50" font-family="Noto Sans Devanagari" font-size="8.5" fill="#ff8a80" text-anchor="middle" font-weight="bold">अधिक</text>
+        <text x="334" y="61" font-family="Noto Sans Devanagari" font-size="8.5" fill="#ff8a80" text-anchor="middle" font-weight="bold">भार!</text>
+        <text x="334" y="195" font-family="Noto Sans Devanagari" font-size="8" fill="#ff8a80" text-anchor="middle" font-weight="bold">275 kg से अधिक ❌</text>
+      </g>
+
+      <!-- Hazard 4: Uneven surface -->
+      <g>
+        <rect x="404" y="40" width="116" height="160" rx="10" fill="rgba(230,57,70,0.10)" stroke="rgba(230,57,70,0.4)" stroke-width="1.5"/>
+        <!-- Scaffold on bumpy ground -->
+        <g transform="translate(462,130) rotate(10)">
+          <rect x="-20" y="-50" width="8" height="100" fill="#888" rx="4"/>
+          <rect x="12" y="-50" width="8" height="100" fill="#888" rx="4"/>
+          <rect x="-24" y="-15" width="56" height="6" fill="#c8a96e" rx="3"/>
+          <circle cx="-16" cy="55" r="10" fill="#333" stroke="#E63946" stroke-width="2"/>
+          <circle cx="16" cy="55" r="10" fill="#333" stroke="#E63946" stroke-width="2"/>
+        </g>
+        <!-- Bumpy ground -->
+        <path d="M 410 188 Q 430 175 450 185 Q 470 195 490 178 Q 510 165 525 182" fill="none" stroke="#E63946" stroke-width="2.5"/>
+        <text x="462" y="50" font-family="Noto Sans Devanagari" font-size="8.5" fill="#ff8a80" text-anchor="middle" font-weight="bold">असमान</text>
+        <text x="462" y="61" font-family="Noto Sans Devanagari" font-size="8.5" fill="#ff8a80" text-anchor="middle" font-weight="bold">जमीन!</text>
+        <text x="462" y="205" font-family="Noto Sans Devanagari" font-size="8" fill="#ff8a80" text-anchor="middle" font-weight="bold">फर्श समतल करें</text>
+      </g>
+
+      <!-- Hazard 5: No harness -->
+      <g>
+        <rect x="532" y="40" width="130" height="160" rx="10" fill="rgba(230,57,70,0.10)" stroke="rgba(230,57,70,0.4)" stroke-width="1.5"/>
+        <!-- Worker no harness -->
+        <rect x="570" y="90" width="8" height="80" fill="#888" rx="4"/>
+        <rect x="616" y="90" width="8" height="80" fill="#888" rx="4"/>
+        <rect x="566" y="103" width="56" height="7" fill="#c8a96e" rx="3"/>
+        <rect x="564" y="89" width="60" height="6" fill="#FF6B00" rx="3"/>
+        <!-- Worker no harness  -->
+        <circle cx="594" cy="73" r="9" fill="#FDBCB4"/>
+        <rect x="589" y="82" width="10" height="14" fill="#FF6B00" rx="3"/>
+        <rect x="583" y="85" width="6" height="10" fill="#FDBCB4" rx="3"/>
+        <rect x="605" y="85" width="6" height="10" fill="#FDBCB4" rx="3"/>
+        <!-- X through harness area -->
+        <line x1="575" y1="75" x2="615" y2="105" stroke="#E63946" stroke-width="3" opacity="0.7"/>
+        <line x1="615" y1="75" x2="575" y2="105" stroke="#E63946" stroke-width="3" opacity="0.7"/>
+        <text x="597" y="54" font-family="Noto Sans Devanagari" font-size="8.5" fill="#ff8a80" text-anchor="middle" font-weight="bold">हार्नेस</text>
+        <text x="597" y="65" font-family="Noto Sans Devanagari" font-size="8.5" fill="#ff8a80" text-anchor="middle" font-weight="bold">नहीं!</text>
+        <text x="597" y="195" font-family="Noto Sans Devanagari" font-size="8" fill="#ff8a80" text-anchor="middle" font-weight="bold">हमेशा बाँधें ✔</text>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<div class="section-sep"></div>
+
+<!-- ══ SECTION 3: ASSEMBLY STEPS ══ -->
+<div class="section fade-in" id="s3">
+  <div class="section-title">🔧 सही <span class="safe">असेंबली</span> कैसे करें?</div>
+  <p class="section-subtitle">स्कैफोल्ड लगाने के सही चरण — क्रम में पालन करें</p>
+  <div class="divider"></div>
+
+  <div class="steps-list">
+    <div class="step" data-speak="चरण एक — स्थान का निरीक्षण करें। काम शुरू करने से पहले जमीन की जाँच करें। जमीन समतल, मजबूत और सूखी होनी चाहिए। गड्ढे, नाली, या ढलान वाली जगह पर मचान न लगाएं।">
+      <div class="step-num">१</div>
+      <div class="step-content">
+        <h4>🔍 स्थान का निरीक्षण</h4>
+        <p>जमीन समतल, मजबूत और सूखी होनी चाहिए। गड्ढे या ढलान पर मचान न लगाएं। ओवरहेड बिजली की तारों की जाँच करें।</p>
+      </div>
+    </div>
+    <div class="step" data-speak="चरण दो — उपकरण की जाँच करें। उपयोग से पहले सभी पाइप, क्लैंप, प्लेटफॉर्म बोर्ड और पहियों की जाँच करें। टूटे, जंग लगे या मुड़े हुए हिस्से कभी भी उपयोग न करें। खराब सामग्री को तुरंत बदलें।">
+      <div class="step-num">२</div>
+      <div class="step-content">
+        <h4>🔎 उपकरण की जाँच</h4>
+        <p>सभी पाइप, क्लैंप, प्लेटफॉर्म बोर्ड और पहियों की जाँच करें। <strong>टूटे, जंग लगे या मुड़े हुए हिस्से कभी उपयोग न करें।</strong></p>
+      </div>
+    </div>
+    <div class="step" data-speak="चरण तीन — बेस फ्रेम लगाएं। सबसे पहले चारों पहियों को ब्रेक लगाकर बंद करें। आउटरिगर जरूर लगाएं। बेस प्लेट समतल रखें और स्क्रू जैक से ऊँचाई बराबर करें।">
+      <div class="step-num">३</div>
+      <div class="step-content">
+        <h4>🏗️ बेस फ्रेम लगाएं</h4>
+        <p>सबसे पहले <strong>चारों पहियों को ब्रेक लगाएं</strong>। आउटरिगर जरूर लगाएं। स्क्रू जैक से ऊँचाई बराबर करें।</p>
+      </div>
+    </div>
+    <div class="step" data-speak="चरण चार — फ्रेम और क्रॉस ब्रेस जोड़ें। ऊपरी ढाँचे को नीचे से ऊपर की ओर लगाएं। हर जोड़ पर क्लैंप को पूरी तरह कसें। क्रॉस ब्रेस दोनों तरफ लगाएं ताकि मचान मजबूत रहे।">
+      <div class="step-num">४</div>
+      <div class="step-content">
+        <h4>🔩 फ्रेम और ब्रेस जोड़ें</h4>
+        <p>नीचे से ऊपर की ओर फ्रेम लगाएं। <strong>हर क्लैंप पूरी तरह कसें।</strong> दोनों तरफ क्रॉस ब्रेस जरूर लगाएं।</p>
+      </div>
+    </div>
+    <div class="step" data-speak="चरण पाँच — गार्डरेल और टो बोर्ड लगाएं। तीन मीटर से अधिक ऊँचाई पर गार्डरेल अनिवार्य है। ऊपरी रेलिंग एक मीटर ऊँची और बीच वाली रेलिंग 50 सेंटीमीटर ऊँची होनी चाहिए। टो बोर्ड 15 सेंटीमीटर ऊँचा होना चाहिए।">
+      <div class="step-num">५</div>
+      <div class="step-content">
+        <h4>🔶 गार्डरेल और टो बोर्ड</h4>
+        <p>3 मीटर से अधिक ऊँचाई पर <strong>गार्डरेल अनिवार्य है</strong>। टॉप रेल: 1 मीटर, मिड रेल: 50 सेमी, टो बोर्ड: 15 सेमी।</p>
+      </div>
+    </div>
+    <div class="step" data-speak="चरण छह — सीढ़ी और एक्सेस लगाएं। मचान पर चढ़ने के लिए हमेशा अंदरूनी सीढ़ी का उपयोग करें। कभी भी बाहर से पाइप पकड़कर न चढ़ें। सीढ़ी को सुरक्षित रूप से बांधें।">
+      <div class="step-num">६</div>
+      <div class="step-content">
+        <h4>🪜 एक्सेस / सीढ़ी</h4>
+        <p>हमेशा <strong>अंदरूनी सीढ़ी</strong> का उपयोग करें। बाहर से पाइप पकड़कर कभी न चढ़ें। सीढ़ी को सुरक्षित बाँधें।</p>
+      </div>
+    </div>
+    <div class="step" data-speak="चरण सात — अंतिम निरीक्षण करें। काम शुरू करने से पहले एक अनुभवी व्यक्ति से पूरे मचान की जाँच करवाएं। सब कुछ ठीक हो तभी काम शुरू करें। इस जाँच को कभी न छोड़ें।">
+      <div class="step-num">७</div>
+      <div class="step-content">
+        <h4>✅ अंतिम निरीक्षण (Handover Check)</h4>
+        <p>काम शुरू करने से पहले <strong>अनुभवी व्यक्ति से पूरे मचान की जाँच करवाएं।</strong> सब ठीक हो, तभी काम शुरू करें।</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-sep"></div>
+
+<!-- ══ SECTION 4: PPE ══ -->
+<div class="section fade-in" id="s4">
+  <div class="section-title">🦺 जरूरी <span class="safe">सुरक्षा उपकरण</span> (PPE)</div>
+  <p class="section-subtitle" data-speak="ऊँचाई पर काम करते समय यह सुरक्षा उपकरण पहनना अनिवार्य है">ये सभी PPE अनिवार्य हैं — बिना इनके काम शुरू न करें</p>
+  <div class="divider"></div>
+
+  <div class="ppe-grid">
+    <div class="ppe-item" data-speak="हेलमेट — इसे हमेशा सिर पर पहनें। यह ऊपर से गिरने वाली वस्तुओं और सिर की चोट से बचाता है। IS 2925 मानक का हेलमेट ही उपयोग करें।">
+      <span class="ppe-icon">⛑️</span>
+      <div class="ppe-name">हेलमेट<br><small style="color:var(--text-muted);font-size:11px;">IS 2925</small></div>
+    </div>
+    <div class="ppe-item" data-speak="फुल बॉडी हार्नेस — यह सबसे जरूरी उपकरण है। इसे हमेशा किसी मजबूत एंकर पॉइंट से जोड़कर रखें। गिरने पर यह आपकी जान बचाता है।">
+      <span class="ppe-icon">🔗</span>
+      <div class="ppe-name">फुल बॉडी हार्नेस<br><small style="color:var(--text-muted);font-size:11px;">EN 361 / IS 3521</small></div>
+    </div>
+    <div class="ppe-item" data-speak="सेफ्टी शूज — स्टील टो वाले जूते पहनें। ये पैर की सुरक्षा करते हैं और फिसलने से बचाते हैं।">
+      <span class="ppe-icon">👟</span>
+      <div class="ppe-name">सेफ्टी शूज<br><small style="color:var(--text-muted);font-size:11px;">Steel Toe</small></div>
+    </div>
+    <div class="ppe-item" data-speak="सेफ्टी ग्लव्स — हाथों की सुरक्षा के लिए दस्ताने पहनें। ये हाथ कटने और फिसलने से बचाते हैं।">
+      <span class="ppe-icon">🧤</span>
+      <div class="ppe-name">सेफ्टी ग्लव्स<br><small style="color:var(--text-muted);font-size:11px;">Anti-Slip</small></div>
+    </div>
+    <div class="ppe-item" data-speak="रिफ्लेक्टिव वेस्ट — नारंगी रंग की चमकीली जैकेट पहनें ताकि आप दूर से दिखें। यह आपको वाहनों और अन्य खतरों से बचाती है।">
+      <span class="ppe-icon">🦺</span>
+      <div class="ppe-name">रिफ्लेक्टिव वेस्ट<br><small style="color:var(--text-muted);font-size:11px;">Hi-Viz</small></div>
+    </div>
+    <div class="ppe-item" data-speak="लैनयार्ड — यह हार्नेस और एंकर पॉइंट को जोड़ता है। इसमें शॉक अब्जॉर्बर होना चाहिए। नियमित रूप से इसकी जाँच करें।">
+      <span class="ppe-icon">⛓️</span>
+      <div class="ppe-name">लैनयार्ड<br><small style="color:var(--text-muted);font-size:11px;">Shock Absorber</small></div>
+    </div>
+  </div>
+
+  <!-- Harness Diagram -->
+  <div style="background:var(--card);border-radius:16px;padding:16px;margin-top:20px;cursor:pointer;" data-speak="सेफ्टी हार्नेस सही तरीके से पहनना बहुत जरूरी है। कंधे की पट्टी सही जगह होनी चाहिए। सीने का बकल ठीक से बंद होना चाहिए। टाँगों की पट्टी भी अच्छे से लगानी चाहिए। लैनयार्ड को हमेशा ऊपर की ओर लगाएं।">
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;text-align:center;">फुल बॉडी हार्नेस — सही तरीका</div>
+    <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <rect width="500" height="280" fill="#141828" rx="10"/>
+
+      <!-- Human figure with harness -->
+      <!-- Head + helmet -->
+      <ellipse cx="250" cy="36" rx="24" ry="20" fill="#FDBCB4"/>
+      <ellipse cx="250" cy="22" rx="26" ry="15" fill="#FFD60A"/>
+      <rect x="224" y="27" width="52" height="8" fill="#FFC107" rx="3"/>
+      <!-- Body -->
+      <rect x="228" y="56" width="44" height="72" fill="#FF6B00" rx="6"/>
+      <!-- Reflective strips on vest -->
+      <rect x="228" y="76" width="44" height="5" fill="#FFD60A" opacity="0.9"/>
+      <rect x="228" y="90" width="44" height="5" fill="#FFD60A" opacity="0.9"/>
+
+      <!-- HARNESS STRAPS -->
+      <!-- Shoulder straps -->
+      <line x1="250" y1="56" x2="235" y2="72" stroke="#E63946" stroke-width="4" stroke-linecap="round"/>
+      <line x1="250" y1="56" x2="265" y2="72" stroke="#E63946" stroke-width="4" stroke-linecap="round"/>
+      <!-- Chest strap -->
+      <rect x="237" y="68" width="26" height="6" fill="#E63946" rx="2"/>
+      <rect x="247" y="66" width="6" height="10" fill="#cc0020" rx="1"/>
+      <!-- Waist belt -->
+      <rect x="226" y="105" width="48" height="8" fill="#E63946" rx="3"/>
+      <!-- Front D-ring -->
+      <ellipse cx="250" cy="105" rx="6" ry="7" fill="none" stroke="#FFD60A" stroke-width="3"/>
+      <!-- Leg straps -->
+      <path d="M 235 128 Q 225 148 230 168" fill="none" stroke="#E63946" stroke-width="4"/>
+      <path d="M 265 128 Q 275 148 270 168" fill="none" stroke="#E63946" stroke-width="4"/>
+
+      <!-- Arms -->
+      <rect x="210" y="60" width="18" height="44" fill="#FDBCB4" rx="6"/>
+      <rect x="272" y="60" width="18" height="44" fill="#FDBCB4" rx="6"/>
+
+      <!-- Legs -->
+      <rect x="232" y="128" width="16" height="60" fill="#37474f" rx="5"/>
+      <rect x="252" y="128" width="16" height="60" fill="#37474f" rx="5"/>
+      <!-- Shoes -->
+      <rect x="228" y="184" width="22" height="12" fill="#333" rx="4"/>
+      <rect x="250" y="184" width="22" height="12" fill="#333" rx="4"/>
+
+      <!-- Lanyard going up -->
+      <line x1="250" y1="56" x2="250" y2="16" stroke="#2EC4B6" stroke-width="3" stroke-dasharray="8,4"/>
+      <circle cx="250" cy="14" r="6" fill="#2EC4B6"/>
+      <text x="270" y="18" font-family="Noto Sans Devanagari" font-size="9" fill="#2EC4B6" font-weight="bold">एंकर पॉइंट ↑</text>
+
+      <!-- Labels -->
+      <!-- Helmet -->
+      <line x1="276" y1="26" x2="320" y2="20" stroke="#FFD60A" stroke-width="1.5"/>
+      <text x="322" y="24" font-family="Noto Sans Devanagari" font-size="9.5" fill="#FFD60A" font-weight="bold">⛑ हेलमेट</text>
+
+      <!-- Shoulder strap -->
+      <line x1="280" y1="65" x2="340" y2="58" stroke="#E63946" stroke-width="1.5"/>
+      <text x="342" y="62" font-family="Noto Sans Devanagari" font-size="9" fill="#ff8a80" font-weight="bold">कंधे की पट्टी</text>
+
+      <!-- Chest buckle -->
+      <line x1="276" y1="72" x2="340" y2="85" stroke="#E63946" stroke-width="1.5"/>
+      <text x="342" y="89" font-family="Noto Sans Devanagari" font-size="9" fill="#ff8a80" font-weight="bold">सीने का बकल</text>
+
+      <!-- D-ring -->
+      <line x1="256" y1="108" x2="320" y2="116" stroke="#FFD60A" stroke-width="1.5"/>
+      <text x="322" y="120" font-family="Noto Sans Devanagari" font-size="9" fill="#FFD60A" font-weight="bold">D-रिंग (लैनयार्ड)</text>
+
+      <!-- Waist belt -->
+      <line x1="220" y1="109" x2="170" y2="100" stroke="#E63946" stroke-width="1.5"/>
+      <text x="90" y="104" font-family="Noto Sans Devanagari" font-size="9" fill="#ff8a80" font-weight="bold">कमर की बेल्ट</text>
+
+      <!-- Leg strap -->
+      <line x1="222" y1="148" x2="170" y2="150" stroke="#E63946" stroke-width="1.5"/>
+      <text x="82" y="154" font-family="Noto Sans Devanagari" font-size="9" fill="#ff8a80" font-weight="bold">टाँग की पट्टी</text>
+
+      <!-- Safety shoes -->
+      <line x1="228" y1="190" x2="170" y2="210" stroke="#888" stroke-width="1.5"/>
+      <text x="90" y="214" font-family="Noto Sans Devanagari" font-size="9" fill="#aaa" font-weight="bold">स्टील टो शूज</text>
+    </svg>
+  </div>
+</div>
+
+<div class="section-sep"></div>
+
+<!-- ══ SECTION 5: DO & DONT ══ -->
+<div class="section fade-in" id="s5">
+  <div class="section-title">✅ करें <span class="hi">और</span> ❌ न करें</div>
+  <div class="divider"></div>
+
+  <div class="do-dont-grid">
+    <div class="do-block" data-speak="यह करें — मचान पर काम से पहले उसकी जाँच करें। हमेशा हार्नेस पहनें और एंकर पॉइंट से जोड़ें। पहियों को हमेशा लॉक करके रखें। एक समय में एक ही व्यक्ति ऊपर-नीचे जाए। सभी औज़ार और सामान को सुरक्षित रखें। काम करते समय साथी से नज़र रखवाएं।">
+      <div class="do-header"><span>✅</span> करें (Do's)</div>
+      <ul>
+        <li>काम से पहले मचान की जाँच करें</li>
+        <li>हमेशा फुल बॉडी हार्नेस पहनें</li>
+        <li>पहिये हमेशा लॉक करके रखें</li>
+        <li>आउटरिगर हमेशा लगाएं</li>
+        <li>एक बार में सिर्फ अधिकृत भार रखें</li>
+        <li>3 बिंदुओं से सीढ़ी पकड़कर चढ़ें</li>
+        <li>साथी से नज़र रखवाएं (Buddy System)</li>
+        <li>PTW (Permit to Work) लें</li>
+        <li>खराब मौसम में काम बंद करें</li>
+      </ul>
+    </div>
+    <div class="dont-block" data-speak="यह न करें — मचान को चलाते समय उस पर कोई न हो। रेलिंग पर झुककर काम न करें। पहिया बिना लॉक किए छोड़ें। क्षमता से अधिक भार न रखें। टूटे हुए उपकरण का उपयोग न करें। हड़बड़ी में असेंबली न करें।">
+      <div class="dont-header"><span>❌</span> न करें (Don'ts)</div>
+      <ul>
+        <li>मचान पर लोगों के साथ न चलाएं</li>
+        <li>रेलिंग पर झुककर काम न करें</li>
+        <li>पहिया बिना लॉक छोड़ें न</li>
+        <li>275 किग्रा से अधिक भार न रखें</li>
+        <li>टूटे / जंग लगे पाइप उपयोग न करें</li>
+        <li>मचान से कभी कूदें नहीं</li>
+        <li>बिजली की तारों के पास काम न करें</li>
+        <li>शराब पीकर काम न करें</li>
+        <li>बिना PTW काम शुरू न करें</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section-sep"></div>
+
+<!-- ══ SECTION 6: QUIZ ══ -->
+<div class="section fade-in" id="s6">
+  <div class="section-title">🧠 अपना <span class="safe">ज्ञान</span> जाँचें</div>
+  <p class="section-subtitle">इन सवालों के जवाब दें और देखें कि आपने कितना सीखा</p>
+  <div class="divider"></div>
+
+  <div class="quiz-card" data-speak="सवाल एक — मोबाइल स्कैफोल्ड पर अधिकतम भार क्षमता कितनी होती है? चारों विकल्प हैं — एक सौ पचास किलोग्राम, दो सौ पचहत्तर किलोग्राम, पाँच सौ किलोग्राम, और एक हज़ार किलोग्राम।">
+    <div class="quiz-q">❓ मोबाइल स्कैफोल्ड की अधिकतम भार क्षमता कितनी होती है?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,false,'❌ गलत! सही उत्तर 275 किग्रा है।')">A. 150 किग्रा</button>
+      <button class="quiz-option" onclick="answer(this,true,'✅ बिल्कुल सही! 275 किग्रा प्रति प्लेटफॉर्म।')">B. 275 किग्रा ✔</button>
+      <button class="quiz-option" onclick="answer(this,false,'❌ गलत! इतना भार खतरनाक है।')">C. 500 किग्रा</button>
+      <button class="quiz-option" onclick="answer(this,false,'❌ बहुत गलत! यह जानलेवा है।')">D. 1000 किग्रा</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" data-speak="सवाल दो — गार्डरेल (रेलिंग) किस ऊँचाई पर अनिवार्य है? विकल्प हैं — एक मीटर, दो मीटर, तीन मीटर, और पाँच मीटर।">
+    <div class="quiz-q">❓ गार्डरेल (रेलिंग) किस ऊँचाई पर अनिवार्य है?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,false,'❌ गलत! 3 मीटर से ऊपर अनिवार्य है।')">A. 1 मीटर</button>
+      <button class="quiz-option" onclick="answer(this,false,'❌ नहीं! 3 मीटर से ऊपर।')">B. 2 मीटर</button>
+      <button class="quiz-option" onclick="answer(this,true,'✅ सही! 3 मीटर या उससे अधिक ऊँचाई पर गार्डरेल जरूरी है।')">C. 3 मीटर ✔</button>
+      <button class="quiz-option" onclick="answer(this,false,'❌ गलत! 3 मीटर से ऊपर ही काफी है।')">D. 5 मीटर</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" data-speak="सवाल तीन — मोबाइल स्कैफोल्ड को चलाते समय क्या करना चाहिए? विकल्प हैं — मजदूरों को ऊपर रखकर चलाएं, पहले सभी को नीचे उतारें फिर चलाएं, धीरे-धीरे चलाएं, और हार्नेस पहनकर ऊपर रहें।">
+    <div class="quiz-q">❓ मोबाइल स्कैफोल्ड को एक जगह से दूसरी जगह ले जाते समय क्या करना चाहिए?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,false,'❌ बिल्कुल गलत! ऊपर लोगों के साथ मचान चलाना बेहद खतरनाक है।')">A. मजदूरों को ऊपर रखकर चलाएं</button>
+      <button class="quiz-option" onclick="answer(this,true,'✅ बिल्कुल सही! पहले सभी को नीचे उतारें, तभी मचान चलाएं।')">B. पहले सभी को नीचे उतारें ✔</button>
+      <button class="quiz-option" onclick="answer(this,false,'❌ गलत! गति कोई मायने नहीं रखती, लोगों को उतारना जरूरी है।')">C. बहुत धीरे-धीरे चलाएं</button>
+      <button class="quiz-option" onclick="answer(this,false,'❌ नहीं! हार्नेस भी काफी नहीं — उतरना ही सही है।')">D. हार्नेस पहनकर ऊपर रहें</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+</div>
+
+<div class="section-sep"></div>
+
+<!-- ══ SECTION 7: EMERGENCY ══ -->
+<div class="section fade-in" id="s7">
+  <div class="section-title">🚨 <span class="hi">आपात स्थिति</span> में क्या करें?</div>
+  <div class="divider"></div>
+
+  <div class="emergency-box" data-speak="आपात स्थिति में — अगर कोई मजदूर ऊँचाई से गिर जाए तो यह करें। पहला — घबराएं नहीं, शांत रहें। दूसरा — तुरंत 112 पर कॉल करें। तीसरा — घायल व्यक्ति को हिलाएं नहीं। चौथा — साइट सुपरवाइज़र को सूचित करें। पाँचवाँ — प्राथमिक चिकित्सा दें — अगर प्रशिक्षित हों। छठा — घटना स्थल को सुरक्षित करें। अपने आप घायल को अस्पताल न ले जाएं।">
+    <h2>🚨 दुर्घटना हो जाए तो?</h2>
+    <p>घबराएं नहीं — शांत रहें और इन चरणों का पालन करें</p>
+    <div class="emergency-steps">
+      <div class="e-step"><div class="e-step-num">1</div>📞 तुरंत <strong>112</strong> (एम्बुलेंस) पर कॉल करें</div>
+      <div class="e-step"><div class="e-step-num">2</div>🚫 घायल व्यक्ति को <strong>हिलाएं नहीं</strong> (रीढ़ की हड्डी)</div>
+      <div class="e-step"><div class="e-step-num">3</div>📢 साइट सुपरवाइज़र को <strong>तुरंत सूचित</strong> करें</div>
+      <div class="e-step"><div class="e-step-num">4</div>🩹 <strong>प्राथमिक चिकित्सा</strong> दें (यदि प्रशिक्षित हों)</div>
+      <div class="e-step"><div class="e-step-num">5</div>🚧 <strong>घटना स्थल सुरक्षित</strong> करें — किसी को पास न आने दें</div>
+      <div class="e-step"><div class="e-step-num">6</div>📝 <strong>घटना रिपोर्ट</strong> तुरंत तैयार करें</div>
+    </div>
+  </div>
+
+  <!-- Key Law -->
+  <div style="background:linear-gradient(135deg,rgba(46,196,182,0.08),rgba(255,107,0,0.06));border:1px solid rgba(46,196,182,0.25);border-radius:16px;padding:20px;margin-top:16px;cursor:pointer;" data-speak="भारतीय कानून के अनुसार — BOCW अधिनियम 1996 के तहत हर निर्माण स्थल पर सुरक्षा नियमों का पालन अनिवार्य है। नियमों का उल्लंघन करने पर जुर्माना और जेल दोनों हो सकते हैं। हर मजदूर को सुरक्षित काम का अधिकार है। नियोक्ता का दायित्व है कि वह सुरक्षित वातावरण प्रदान करे।">
+    <div style="font-size:14px;font-weight:700;color:var(--safe);margin-bottom:10px;">⚖️ भारतीय कानून — आपके अधिकार</div>
+    <div style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+      🏛️ <strong style="color:var(--text);">BOCW अधिनियम 1996</strong> — हर निर्माण मजदूर को सुरक्षित काम का अधिकार है<br>
+      📋 <strong style="color:var(--text);">Factories Act 1948</strong> — नियोक्ता को सुरक्षित वातावरण देना अनिवार्य है<br>
+      ⚠️ नियमों का उल्लंघन = जुर्माना + जेल<br>
+      🆘 खतरनाक काम करने से <strong style="color:var(--yellow);">मना करने का अधिकार</strong> हर मजदूर को है
+    </div>
+  </div>
+</div>
+
+<!-- WARNING STRIPE BOTTOM -->
+<div class="warning-stripe"></div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div style="font-size:24px;margin-bottom:8px;">🦺</div>
+  <strong>सुरक्षा सबसे पहले — Safety First</strong>
+  <p style="margin-top:6px;">यह सामग्री EHS जागरूकता के लिए बनाई गई है। सभी निर्माण स्थलों पर लागू मानकों का पालन करें।</p>
+  <p style="margin-top:6px;color:#666;">निर्मित: Ankit Verma — EHS Manager &nbsp;|&nbsp; mechanicalankitv@gmail.com</p>
+  <p style="margin-top:4px;font-size:11px;color:#444;">© 2026 · BOCW Act 1996 · ISO 45001:2018 · IS:4014</p>
+</footer>
+
+<script>
+// ── SPEECH ENGINE ──
+let synth = window.speechSynthesis;
+let currentUtterance = null;
+let currentEl = null;
+let hindiVoice = null;
+let voicesLoaded = false;
+
+function loadVoices() {
+  const voices = synth.getVoices();
+  // Try to find Hindi voice
+  hindiVoice = voices.find(v => v.lang === 'hi-IN') ||
+               voices.find(v => v.lang.startsWith('hi')) ||
+               voices.find(v => v.name.toLowerCase().includes('hindi')) ||
+               null;
+  voicesLoaded = true;
+}
+
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+loadVoices();
+
+const indicator = document.getElementById('audio-indicator');
+const audioLabel = document.getElementById('audio-label');
+
+function speak(text, el) {
+  if (!text) return;
+
+  // Stop current
+  if (synth.speaking) {
+    synth.cancel();
+    if (currentEl) currentEl.classList.remove('speaking-el');
+    if (currentUtterance && currentEl === el) {
+      // Clicked same element — just stop
+      indicator.classList.remove('speaking');
+      audioLabel.textContent = 'छूएं — सुनें';
+      currentEl = null;
+      return;
+    }
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'hi-IN';
+  utterance.rate = 0.88;
+  utterance.pitch = 1.05;
+  utterance.volume = 1;
+
+  if (hindiVoice) utterance.voice = hindiVoice;
+  else if (!voicesLoaded) {
+    loadVoices();
+    if (hindiVoice) utterance.voice = hindiVoice;
+  }
+
+  utterance.onstart = () => {
+    indicator.classList.add('speaking');
+    audioLabel.textContent = '🔊 सुन रहे हैं...';
+    if (el) { el.classList.add('speaking-el'); currentEl = el; }
+  };
+
+  utterance.onend = () => {
+    indicator.classList.remove('speaking');
+    audioLabel.textContent = 'छूएं — सुनें';
+    if (el) el.classList.remove('speaking-el');
+    currentEl = null;
+  };
+
+  utterance.onerror = () => {
+    indicator.classList.remove('speaking');
+    audioLabel.textContent = 'छूएं — सुनें';
+    if (el) el.classList.remove('speaking-el');
+    currentEl = null;
+  };
+
+  currentUtterance = utterance;
+  synth.speak(utterance);
+}
+
+// ── CLICK/TOUCH HANDLER ──
+document.body.addEventListener('click', (e) => {
+  // Walk up the DOM tree looking for data-speak
+  let target = e.target;
+  let speakEl = null;
+  while (target && target !== document.body) {
+    if (target.dataset && target.dataset.speak) { speakEl = target; break; }
+    target = target.parentElement;
+  }
+
+  if (speakEl) {
+    speak(speakEl.dataset.speak, speakEl);
+    return;
+  }
+
+  // If no specific element — speak section context
+  // Find closest section
+  let sectionEl = e.target;
+  while (sectionEl && !sectionEl.classList.contains('section')) {
+    sectionEl = sectionEl.parentElement;
+  }
+  if (sectionEl && sectionEl.querySelector('[data-speak]')) {
+    const first = sectionEl.querySelector('[data-speak]');
+    speak(first.dataset.speak, first);
+  }
+});
+
+// Touch events for mobile
+document.body.addEventListener('touchstart', (e) => {
+  // This enables audio on mobile (iOS requires user gesture)
+  if (!voicesLoaded) loadVoices();
+}, { passive: true });
+
+// ── QUIZ LOGIC ──
+function answer(btn, isCorrect, msg) {
+  const card = btn.closest('.quiz-card');
+  if (card.querySelector('.correct') || card.querySelector('.wrong')) return; // already answered
+
+  const allBtns = card.querySelectorAll('.quiz-option');
+  allBtns.forEach(b => b.style.pointerEvents = 'none');
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    allBtns.forEach(b => { if (b.textContent.includes('✔')) b.classList.add('correct'); });
+  }
+
+  const feedback = card.querySelector('.quiz-feedback');
+  feedback.textContent = msg;
+  feedback.style.display = 'block';
+  feedback.style.color = isCorrect ? 'var(--safe)' : 'var(--danger)';
+
+  speak(msg, feedback);
+}
+
+// ── INTERSECTION OBSERVER (fade in) ──
+const faders = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.08 });
+faders.forEach(el => observer.observe(el));
+
+// ── AUTO-SPEAK HERO ON LOAD ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const heroText = 'नमस्ते! यह वेबसाइट मोबाइल स्कैफोल्डिंग और ऊँचाई पर काम करते समय सुरक्षा के बारे में जानकारी देती है। कहीं भी छूएं और सुनें। सुरक्षित रहें!';
+    speak(heroText, document.querySelector('.hero'));
+  }, 1200);
+});
+</script>
+</body>
+</html>
